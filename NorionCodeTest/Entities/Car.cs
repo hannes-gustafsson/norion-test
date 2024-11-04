@@ -1,9 +1,11 @@
-﻿namespace NorionCodeTest.Entities;
+﻿using NorionCodeTest.Enums;
+
+namespace NorionCodeTest.Entities;
 
 public class Car : IVehicle
 {
-    public string GetVehicleType()
+    public VehicleType GetVehicleType()
     {
-        return "Car";
+        return VehicleType.Car;
     }
 }

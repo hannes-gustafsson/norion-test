@@ -10,6 +10,15 @@ public interface ITollCalculatorService
 
 public class TollCalculatorService : ITollCalculatorService
 {
+    private static readonly List<VehicleType> _tollFreeVehicles = new List<VehicleType>
+    {
+        VehicleType.Motorbike,
+        VehicleType.Tractor,
+        VehicleType.Emergency,
+        VehicleType.Diplomat,
+        VehicleType.Foreign,
+        VehicleType.Military
+    };
 
     /**
      * Calculate the total toll fee for one day
@@ -65,13 +74,7 @@ public class TollCalculatorService : ITollCalculatorService
         if (vehicle is null)
             return false;
 
-        string vehicleType = vehicle.GetVehicleType();
-        return vehicleType.Equals(TollFreeVehicles.Motorbike.ToString()) ||
-               vehicleType.Equals(TollFreeVehicles.Tractor.ToString()) ||
-               vehicleType.Equals(TollFreeVehicles.Emergency.ToString()) ||
-               vehicleType.Equals(TollFreeVehicles.Diplomat.ToString()) ||
-               vehicleType.Equals(TollFreeVehicles.Foreign.ToString()) ||
-               vehicleType.Equals(TollFreeVehicles.Military.ToString());
+        return _tollFreeVehicles.Contains(vehicle.GetVehicleType());
     }
 
     public int GetTollFee(DateTime passageDate, IVehicle vehicle)

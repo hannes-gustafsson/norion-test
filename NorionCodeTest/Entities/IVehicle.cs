@@ -1,6 +1,8 @@
-﻿namespace NorionCodeTest.Entities;
+﻿using NorionCodeTest.Enums;
+
+namespace NorionCodeTest.Entities;
 
 public interface IVehicle
 {
-    string GetVehicleType();
+    VehicleType GetVehicleType();
 }
