@@ -1,9 +1,9 @@
 ﻿using System;
-using TollFeeCalculator;
+using NorionCodeTest.Enums;
 
-namespace TollCallculator;
+namespace NorionCodeTest.Services;
 
-public class TollCalculator
+public class TollCalculatorService
 {
 
     /**
@@ -24,7 +24,7 @@ public class TollCalculator
             var tempFee = GetTollFee(intervalStart, vehicle);
 
             var diffInMillies = date.Millisecond - intervalStart.Millisecond;
-            var minutes = diffInMillies/1000/60;
+            var minutes = diffInMillies / 1000 / 60;
 
             if (minutes <= 60)
             {

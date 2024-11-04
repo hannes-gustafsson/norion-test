@@ -1,4 +1,4 @@
-﻿namespace TollFeeCalculator;
+﻿namespace NorionCodeTest.Enums;
 
 public interface IVehicle
 {
