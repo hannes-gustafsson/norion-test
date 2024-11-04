@@ -19,22 +19,36 @@ public class TollCalculatorService : ITollCalculatorService
      * @return - the total toll fee for that day
      */
 
-    public int GetTollFee(IVehicle vehicle, DateTime[] dates)
+    public int GetTollFee(IVehicle vehicle, DateTime[] passageDates)
     {
-        var intervalStart = dates[0];
+        var intervalStart = passageDates[0];
         var totalFee = 0;
-        foreach (var date in dates)
+        foreach (var passageDate in passageDates)
         {
-            var nextFee = GetTollFee(date, vehicle);
+            if (totalFee > 60)
+            {
+                totalFee = 60;
+                return totalFee;
+            }
+
+            var nextFee = GetTollFee(passageDate, vehicle);
             var tempFee = GetTollFee(intervalStart, vehicle);
 
-            var diffInMillies = date.Millisecond - intervalStart.Millisecond;
-            var minutes = diffInMillies / 1000 / 60;
+            var dateDifferenceInMilliseconds = passageDate.Millisecond - intervalStart.Millisecond;
+            var dateDifferenceInMinutes = dateDifferenceInMilliseconds / 1000 / 60;
 
-            if (minutes <= 60)
+            if (dateDifferenceInMinutes <= 60)
             {
-                if (totalFee > 0) totalFee -= tempFee;
-                if (nextFee >= tempFee) tempFee = nextFee;
+                if (totalFee > 0)
+                {
+                    totalFee -= tempFee;
+                }
+
+                if (nextFee >= tempFee)
+                {
+                    tempFee = nextFee;
+                }
+
                 totalFee += tempFee;
             }
             else
@@ -42,7 +56,7 @@ public class TollCalculatorService : ITollCalculatorService
                 totalFee += nextFee;
             }
         }
-        if (totalFee > 60) totalFee = 60;
+
         return totalFee;
     }
 
@@ -60,13 +74,13 @@ public class TollCalculatorService : ITollCalculatorService
                vehicleType.Equals(TollFreeVehicles.Military.ToString());
     }
 
-    public int GetTollFee(DateTime date, IVehicle vehicle)
+    public int GetTollFee(DateTime passageDate, IVehicle vehicle)
     {
-        if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle))
+        if (IsTollFreeDate(passageDate) || IsTollFreeVehicle(vehicle))
             return 0;
 
-        var hour = date.Hour;
-        var minute = date.Minute;
+        var hour = passageDate.Hour;
+        var minute = passageDate.Minute;
 
         if (hour == 6 && minute >= 0 && minute <= 29) return 8;
         else if (hour == 6 && minute >= 30 && minute <= 59) return 13;
