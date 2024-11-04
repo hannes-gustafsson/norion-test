@@ -1,6 +1,4 @@
-﻿using NorionCodeTest.Enums;
-
-namespace NorionCodeTest.Entities;
+﻿namespace NorionCodeTest.Entities;
 
 public class Motorbike : IVehicle
 {

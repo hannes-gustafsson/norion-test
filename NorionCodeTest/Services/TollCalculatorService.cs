@@ -1,5 +1,5 @@
 ﻿using System;
-using NorionCodeTest.Enums;
+using NorionCodeTest.Entities;
 
 namespace NorionCodeTest.Services;
 
