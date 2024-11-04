@@ -3,7 +3,12 @@ using NorionCodeTest.Enums;
 
 namespace NorionCodeTest.Services;
 
-public class TollCalculatorService
+public interface ITollCalculatorService
+{
+    public int GetTollFee(IVehicle vehicle, DateTime[] dates);
+}
+
+public class TollCalculatorService : ITollCalculatorService
 {
 
     /**
