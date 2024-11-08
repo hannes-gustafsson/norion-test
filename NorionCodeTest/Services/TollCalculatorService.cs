@@ -30,7 +30,7 @@ public class TollCalculatorService : ITollCalculatorService
 
     public int GetTollFee(IVehicle vehicle, DateTime[] passageDates)
     {
-        var intervalStart = passageDates[0];
+        var firstPassageDate = passageDates[0];
         var totalFee = 0;
         foreach (var passageDate in passageDates)
         {
@@ -41,13 +41,11 @@ public class TollCalculatorService : ITollCalculatorService
             }
 
             var nextFee = GetTollFee(vehicle, passageDate);
-            var tempFee = GetTollFee(vehicle, intervalStart);
+            var tempFee = GetTollFee(vehicle, firstPassageDate);
+            var dateDifference = passageDate - firstPassageDate;
 
-            var dateDifferenceInMilliseconds = passageDate.Millisecond - intervalStart.Millisecond;
-            var dateDifferenceInMinutes = dateDifferenceInMilliseconds / 1000 / 60;
-
-            if (dateDifferenceInMinutes <= 60)
-            {
+            if (dateDifference.Minutes <= 60)   // If a vehicle reaches 2 payment stations with less than 30 seconds in between this would cause inaccuracies 
+            {                                   // due to rounding to an int. However I do not know how they are placed in reality so will keep it as is 
                 if (totalFee > 0)
                 {
                     totalFee -= tempFee;
