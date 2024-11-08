@@ -40,8 +40,8 @@ public class TollCalculatorService : ITollCalculatorService
                 return totalFee;
             }
 
-            var nextFee = GetTollFee(passageDate, vehicle);
-            var tempFee = GetTollFee(intervalStart, vehicle);
+            var nextFee = GetTollFee(vehicle, passageDate);
+            var tempFee = GetTollFee(vehicle, intervalStart);
 
             var dateDifferenceInMilliseconds = passageDate.Millisecond - intervalStart.Millisecond;
             var dateDifferenceInMinutes = dateDifferenceInMilliseconds / 1000 / 60;
@@ -77,7 +77,7 @@ public class TollCalculatorService : ITollCalculatorService
         return _tollFreeVehicles.Contains(vehicle.GetVehicleType());
     }
 
-    private static int GetTollFee(DateTime passageDate, IVehicle vehicle)
+    private static int GetTollFee(IVehicle vehicle, DateTime passageDate)
     {
         if (IsTollFreeDate(passageDate) || IsTollFreeVehicle(vehicle))
             return 0;
