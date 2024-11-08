@@ -27,41 +27,21 @@ public class TollCalculatorService : ITollCalculatorService
      * @param dates   - date and time of all passes on one day
      * @return - the total toll fee for that day
      */
-
     public int GetTollFee(IVehicle vehicle, DateTime[] passageDates)
     {
         var firstPassageDate = passageDates[0];
         var totalFee = 0;
+        const int maxFee = 60;
         foreach (var passageDate in passageDates)
         {
-            if (totalFee > 60)
-            {
-                totalFee = 60;
+            if (totalFee >= 60)
+                return maxFee;
+
+            var dateDifference = passageDate - firstPassageDate; // If a vehicle reaches 2 payment stations with less than 30 seconds in between this would cause inaccuracies 
+            if (dateDifference.Minutes > 60)                     // due to rounding to an int. However I do not know how they are placed in reality so will keep it as is 
                 return totalFee;
-            }
 
-            var nextFee = GetTollFee(vehicle, passageDate);
-            var tempFee = GetTollFee(vehicle, firstPassageDate);
-            var dateDifference = passageDate - firstPassageDate;
-
-            if (dateDifference.Minutes <= 60)   // If a vehicle reaches 2 payment stations with less than 30 seconds in between this would cause inaccuracies 
-            {                                   // due to rounding to an int. However I do not know how they are placed in reality so will keep it as is 
-                if (totalFee > 0)
-                {
-                    totalFee -= tempFee;
-                }
-
-                if (nextFee >= tempFee)
-                {
-                    tempFee = nextFee;
-                }
-
-                totalFee += tempFee;
-            }
-            else
-            {
-                totalFee += nextFee;
-            }
+            totalFee += GetTollFee(vehicle, passageDate);
         }
 
         return totalFee;
@@ -113,7 +93,7 @@ public class TollCalculatorService : ITollCalculatorService
         var month = date.Month;
         var day = date.Day;
 
-        if (year == 2013)
+        if (year == 2013)   // If this was a real world case one would have to perform this kind of a calculation for every year due to holidays etc. changing
         {
             if (month == 1 && day == 1
                 || month == 3 && (day == 28 || day == 29)
