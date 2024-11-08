@@ -47,14 +47,6 @@ public class TollCalculatorService : ITollCalculatorService
         return totalFee;
     }
 
-    private static bool IsTollFreeVehicle(IVehicle vehicle)
-    {
-        if (vehicle is null)
-            return false;
-
-        return _tollFreeVehicles.Contains(vehicle.GetVehicleType());
-    }
-
     private static int GetTollFee(IVehicle vehicle, DateTime passageDate)
     {
         if (IsTollFreeDate(passageDate) || IsTollFreeVehicle(vehicle))
@@ -81,7 +73,16 @@ public class TollCalculatorService : ITollCalculatorService
             return 13;
         else if (hour == 18 && minute <= 29)
             return 8;
-        else return 0;
+        else
+            return 0;
+    }
+
+    private static bool IsTollFreeVehicle(IVehicle vehicle)
+    {
+        if (vehicle is null)
+            return false;
+
+        return _tollFreeVehicles.Contains(vehicle.GetVehicleType());
     }
 
     private static bool IsTollFreeDate(DateTime date)
