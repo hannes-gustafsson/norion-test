@@ -1,13 +1,12 @@
-﻿namespace NorionCodeTest.Enums
+﻿namespace NorionCodeTest.Enums;
+
+public enum VehicleType
 {
-    public enum VehicleType
-    {
-        Car,
-        Motorbike,
-        Tractor,
-        Emergency,
-        Diplomat,
-        Foreign,
-        Military
-    }
+    Car,
+    Motorbike,
+    Tractor,
+    Emergency,
+    Diplomat,
+    Foreign,
+    Military
 }
