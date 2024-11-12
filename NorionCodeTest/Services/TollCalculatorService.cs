@@ -1,5 +1,6 @@
 ﻿using NorionCodeTest.Entities;
 using NorionCodeTest.Enums;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NorionCodeTest.Services;
 
@@ -31,22 +32,44 @@ public class TollCalculatorService : ITollCalculatorService
     {
         var firstPassageDate = passageDates[0];
         var totalFee = 0;
-        const int maxFee = 60;
+        var maxHourlyFee = GetTollFee(vehicle, firstPassageDate);
+        const int maxTotalFee = 60;
         foreach (var passageDate in passageDates)
         {
-            if (totalFee >= maxFee)
-                return maxFee;
+            var currentFee = GetTollFee(vehicle, passageDate);
+            var dateDifference = passageDate - firstPassageDate; // If a vehicle reaches 2 payment stations with less than 30 seconds in between this would cause inaccuracies due to rounding to an int. However I do not know how they are placed in reality so will keep it as is 
+            (totalFee, maxHourlyFee) = CalculateMaxHourlyFee(dateDifference, currentFee, maxHourlyFee, totalFee);
 
-            var dateDifference = passageDate - firstPassageDate; // If a vehicle reaches 2 payment stations with less than 30 seconds in between this would cause inaccuracies 
-            if (dateDifference.Minutes > 60)                     // due to rounding to an int. However I do not know how they are placed in reality so will keep it as is 
-                return totalFee;
-
-            totalFee += GetTollFee(vehicle, passageDate);
+            if (totalFee >= maxTotalFee)
+                return maxTotalFee;
         }
 
-        return totalFee >= maxFee
-            ? maxFee
+        return totalFee >= maxTotalFee
+            ? maxTotalFee
             : totalFee;
+    }
+
+    private static (int, int) CalculateMaxHourlyFee(TimeSpan dateDifference, int currentFee, int maxHourlyFee, int totalFee)
+    {
+        if (dateDifference.Minutes <= 60)
+        {
+            if (totalFee > 0)
+            {
+                totalFee -= maxHourlyFee;
+            }
+            if (currentFee >= maxHourlyFee)
+            {
+                maxHourlyFee = currentFee;
+            }
+            
+            totalFee += maxHourlyFee;
+        }
+        else
+        {
+            totalFee += currentFee;
+        }
+
+        return (totalFee, maxHourlyFee);
     }
 
     private static int GetTollFee(IVehicle vehicle, DateTime passageDate)
