@@ -34,7 +34,7 @@ public class TollCalculatorService : ITollCalculatorService
         const int maxFee = 60;
         foreach (var passageDate in passageDates)
         {
-            if (totalFee >= 60)
+            if (totalFee >= maxFee)
                 return maxFee;
 
             var dateDifference = passageDate - firstPassageDate; // If a vehicle reaches 2 payment stations with less than 30 seconds in between this would cause inaccuracies 
@@ -44,7 +44,9 @@ public class TollCalculatorService : ITollCalculatorService
             totalFee += GetTollFee(vehicle, passageDate);
         }
 
-        return totalFee;
+        return totalFee >= maxFee
+            ? maxFee
+            : totalFee;
     }
 
     private static int GetTollFee(IVehicle vehicle, DateTime passageDate)
