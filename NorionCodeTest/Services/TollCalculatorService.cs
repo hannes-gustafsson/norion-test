@@ -6,7 +6,7 @@ namespace NorionCodeTest.Services;
 
 public interface ITollCalculatorService
 {
-    public int GetTollFee(IVehicle vehicle, DateTime[] dates);
+    public int GetTollFee(Vehicle vehicle, DateTime[] dates);
 }
 
 public class TollCalculatorService : ITollCalculatorService
@@ -28,7 +28,7 @@ public class TollCalculatorService : ITollCalculatorService
      * @param dates   - date and time of all passes on one day
      * @return - the total toll fee for that day
      */
-    public int GetTollFee(IVehicle vehicle, DateTime[] passageDates)
+    public int GetTollFee(Vehicle vehicle, DateTime[] passageDates)
     {
         var firstPassageDate = passageDates[0];
         var totalFee = 0;
@@ -72,7 +72,7 @@ public class TollCalculatorService : ITollCalculatorService
         return (totalFee, maxHourlyFee);
     }
 
-    private static int GetTollFee(IVehicle vehicle, DateTime passageDate)
+    private static int GetTollFee(Vehicle vehicle, DateTime passageDate)
     {
         if (IsTollFreeDate(passageDate) || IsTollFreeVehicle(vehicle))
             return 0;
@@ -111,12 +111,12 @@ public class TollCalculatorService : ITollCalculatorService
             return 0;
     }
 
-    private static bool IsTollFreeVehicle(IVehicle vehicle)
+    private static bool IsTollFreeVehicle(Vehicle vehicle)
     {
         if (vehicle is null)
             return false;
 
-        return _tollFreeVehicles.Contains(vehicle.GetVehicleType());
+        return _tollFreeVehicles.Contains(vehicle.VehicleType);
     }
 
     private static bool IsTollFreeDate(DateTime date)
