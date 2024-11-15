@@ -51,7 +51,7 @@ public class TollCalculatorService : ITollCalculatorService
 
     private static (int, int) CalculateMaxHourlyFee(TimeSpan dateDifference, int currentFee, int maxHourlyFee, int totalFee)
     {
-        if (dateDifference.Minutes <= 60)
+        if (dateDifference.TotalMinutes <= 60)
         {
             if (totalFee > 0)
             {
