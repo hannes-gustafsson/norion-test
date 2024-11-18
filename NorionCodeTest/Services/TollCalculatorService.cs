@@ -77,34 +77,33 @@ public class TollCalculatorService : ITollCalculatorService
         if (IsTollFreeDate(passageDate) || IsTollFreeVehicle(vehicle))
             return 0;
 
-        var hour = passageDate.Hour;
-        var minute = passageDate.Minute;
+        var timeOfDay = passageDate.TimeOfDay;
 
-        if (hour == 6 && minute <= 29)
+        if (timeOfDay >= new TimeSpan(6, 0, 0) && timeOfDay <= new TimeSpan(6, 29, 0))
             return 8;
 
-        else if (hour == 6 && minute >= 30 && minute <= 59)
+        else if (timeOfDay >= new TimeSpan(6, 30, 0) && timeOfDay <= new TimeSpan(6, 59, 0))
             return 13;
 
-        else if (hour == 7 && minute <= 59)
+        else if (timeOfDay >= new TimeSpan(7, 0, 0) && timeOfDay <= new TimeSpan(7, 59, 0))
             return 18;
 
-        else if (hour == 8 && minute <= 29)
+        else if (timeOfDay >= new TimeSpan(8, 0, 0) && timeOfDay <= new TimeSpan(8, 29, 0))
             return 13;
 
-        else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59)
+        else if (timeOfDay >= new TimeSpan(8, 30, 0) && timeOfDay <= new TimeSpan(14, 59, 0))
             return 8;
 
-        else if (hour == 15 && minute <= 29)
+        else if (timeOfDay >= new TimeSpan(15, 0, 0) && timeOfDay <= new TimeSpan(15, 29, 0))
             return 13;
 
-        else if (hour == 15 || hour == 16 && minute <= 59)
+        else if (timeOfDay >= new TimeSpan(15, 30, 0) && timeOfDay <= new TimeSpan(16, 59, 0))
             return 18;
 
-        else if (hour == 17 && minute <= 59)
+        else if (timeOfDay >= new TimeSpan(17, 0, 0) && timeOfDay <= new TimeSpan(17, 59, 0))
             return 13;
 
-        else if (hour == 18 && minute <= 29)
+        else if (timeOfDay >= new TimeSpan(18, 0, 0) && timeOfDay <= new TimeSpan(18, 29, 0))
             return 8;
 
         else
