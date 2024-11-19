@@ -50,6 +50,8 @@ public class TollCalculatorService : ITollCalculatorService
 
     private static (int, int) CalculateMaxHourlyFee(TimeSpan dateDifference, int currentFee, int maxHourlyFee, int totalFee)
     {
+        // Requirements regarding passage within 60 minutes are a bit unclear. Currently we only compare against the first recorded pass which means
+        // that passes after the first hour are not considered. However I need clearer requirements for this so will keep it as is
         if (dateDifference.TotalMinutes <= 60)
         {
             if (totalFee > 0)
